@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  gas-mini-server:
+      container_name: gas-mini-server
+      build: .
+      volumes: 
+        - './server/nginx:/etc/nginx'
+        - './html:/var/www/html'
+        - './data:/home/data'
+      restart: unless-stopped
+      ports:
+        - '81:81'
+        # - '443:443'
+      networks:
+        - localnet
+networks:
+  localnet:
+    driver: bridge
+
+

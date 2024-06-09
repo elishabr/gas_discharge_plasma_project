@@ -1,0 +1,84 @@
+<header>
+    <meta charset="UTF-8">
+</header>
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+<script>
+    async function fetchData() {
+        try {
+            const response = await fetch('/data/data.txt');
+            const data = await response.text();
+            // console.log(data);
+            return data;
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    function chart(X, Y){
+        const ctx = document.getElementById('myChart');
+             new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: X,
+                datasets: [{
+                  label: 'ВАХ высокочастотной газоразрядной плазмы',
+                  data: Y,
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: ' Ток (А) '
+                        }
+                    },
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: ' Напряжение (В) '
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0, // Устанавливает радиус точек
+                    }
+                },
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 0.00001,
+                }
+            }
+        });
+    }
+
+    (() => {
+        (async () => {
+            const data = await fetchData();
+            return data;
+        })().then(data => {
+            const oX = [];
+            const oY = [];
+            data.split('\n').forEach(line => {
+                const regex1 = /^!/;
+                const regex2 = /(-?\d+\,?(\d+)?([eE]-?\d+)?)/g;
+                const array = line.match(regex2);
+                if (array && !line.match(regex1)) {
+                    oX.push(parseFloat(array[0].replace(/,/,'.')));
+                    oY.push(parseFloat(array[1].replace(/,/,'.')));
+                }
+            });
+            console.log(oX, oY);
+            chart(oX, oY);
+        });
+    })();
+</script>

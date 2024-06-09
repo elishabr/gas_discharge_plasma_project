@@ -1,0 +1,70 @@
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // const ctx = document.getElementById('myChart');
+  //  new Chart(ctx, {
+  //   type: 'bar',
+  //   data: {
+  //     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  //     datasets: [{
+  //       label: '# of Votes',
+  //       data: [12, 19, 3, 5, 2, 3],
+  //       borderWidth: 1
+  //     }]
+  //   },
+  //   options: {
+  //     scales: {
+  //       y: {
+  //         beginAtZero: true
+  //       }
+  //     }
+  //   }
+  // });
+  async function fetchData() {
+      try {
+          const response = await fetch('/data/data.txt');
+          const data = await response.text();
+          console.log(data);
+          return data;
+      } catch (error) {
+          console.error('Ошибка:', error);
+      }
+  }
+
+  fetchData();
+  // (() => {
+  //     const data = await fetchData();
+  //     // data.split('\n').forEach(line => {
+  //     //     const regex = /(\d+)\s+\d+/;
+  //     //     const matches = line.match(regex);
+  //     //     console.log("Hellp");
+  //     //     console.log(matches ? matches[0] : null);
+  //     // });
+  // })();
+
+  // (() => {
+  //     (async () => {
+  //         const data = await fetchData();
+  //     })().then(() => {
+  //         // Код, который будет выполнен после завершения асинхронной операции
+  //     });
+  // })();
+
+</script>
+
+const regex = /(-?\d+\,\d+([eE]-?\d+)?);(-?\d+\,\d+([eE]-?\d+)?)/g;
+let match;
+console.log("Hell");
+while ((match = regex.exec(line)) !== null) {
+    console.log("Helll");
+    const [_, num1, num2] = match; // Игнорируем полностью совпавшую строку, используем только захватываемые группы
+    //const parsedNum1 = parseFloat(num1.replace(',', '.'));
+    //const parsedNum2 = parseFloat(num2.replace(',', '.'));
+    console.log(`First: ${num1}, Second: ${num2}`);
+    // console.log(`First: ${parsedNum1}, Second: ${parsedNum2}`);
+    // Обработка чисел
+}
