@@ -10,11 +10,14 @@ WORKDIR /home
 
 COPY server/server.c /server.c
 COPY script_for_image.sh /script_for_image.sh
-COPY server/ssl-params.conf /etc/nginx/ssl-params.conf
 
 RUN apt update && apt install -y gcc spawn-fcgi libfcgi-dev curl openssl && \
  rm -rf /var/lib/apt/lists && chmod +x /script_for_image.sh && \
  gcc  -o server1  /server.c -l fcgi
+
+RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048 &&\
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/self.key -out /etc/ssl/certs/self.crt \
+    -subj "/C=RU/ST=Moscow/L=Kremlin/O=Azzrael Code/OU=Org/CN=azz.code"
 
 # создать группу и пользователя
 RUN groupadd -r $NGINX_GROUP && useradd -r -g $NGINX_GROUP $NGINX_USER
